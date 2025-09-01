@@ -1,60 +1,274 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <title>Gestore Libreria - UI</title>
-  <link rel="stylesheet" href="/styles.css" />
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    pre { background:#f4f4f4; padding:8px }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Gestore Libreria Digitale (Web)</h1>
-  <div class="container">
-    <div class="section-title">
-      <h1>Gestore Libreria Digitale</h1>
-      <div class="controls">
-        <button class="btn btn-ghost" onclick="loadBooks()">Ricarica libri</button>
-        <button class="btn btn-ghost" onclick="loadUsers()">Ricarica utenti</button>
-        <button class="btn btn-ghost" onclick="loadLoans()">Ricarica prestiti</button>
-      </div>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>📚 Digital Library</h1>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn active" data-section="books">Libri</button>
+                    <button class="nav-btn" data-section="users">Utenti</button>
+                    <button class="nav-btn" data-section="loans">Prestiti</button>
+                    <button class="nav-btn" data-section="stats">Statistiche</button>
+                </nav>
+                <div class="header-actions">
+                    <button class="btn btn-icon" id="refresh-btn" title="Aggiorna dati">
+                        <span class="icon">🔄</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Books Section -->
+            <section class="section active" id="books-section">
+                <div class="section-header">
+                    <h2>Gestione Libri</h2>
+                    <button class="btn btn-primary" id="add-book-btn">
+                        <span class="icon">➕</span>
+                        Aggiungi Libro
+                    </button>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" id="books-search" placeholder="Cerca libri per titolo, autore o ISBN...">
+                    <span class="search-icon">🔍</span>
+                </div>
+
+                <div class="filters">
+                    <select id="genre-filter">
+                        <option value="">Tutti i generi</option>
+                        <option value="Narrativa">Narrativa</option>
+                        <option value="Tecnologia">Tecnologia</option>
+                        <option value="Business">Business</option>
+                        <option value="Self-help">Self-help</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Storia">Storia</option>
+                        <option value="Filosofia">Filosofia</option>
+                    </select>
+                    <select id="availability-filter">
+                        <option value="">Tutti</option>
+                        <option value="available">Disponibili</option>
+                        <option value="unavailable">Non disponibili</option>
+                    </select>
+                </div>
+
+                <div class="books-grid" id="books-grid">
+                    <!-- Books will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section class="section" id="users-section">
+                <div class="section-header">
+                    <h2>Gestione Utenti</h2>
+                    <button class="btn btn-primary" id="add-user-btn">
+                        <span class="icon">👤➕</span>
+                        Registra Utente
+                    </button>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" id="users-search" placeholder="Cerca utenti per nome o email...">
+                    <span class="search-icon">🔍</span>
+                </div>
+
+                <div class="users-grid" id="users-grid">
+                    <!-- Users will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Loans Section -->
+            <section class="section" id="loans-section">
+                <div class="section-header">
+                    <h2>Gestione Prestiti</h2>
+                    <button class="btn btn-primary" id="add-loan-btn">
+                        <span class="icon">📖➕</span>
+                        Nuovo Prestito
+                    </button>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" id="loans-search" placeholder="Cerca prestiti per libro o utente...">
+                    <span class="search-icon">🔍</span>
+                </div>
+
+                <div class="filters">
+                    <select id="loan-status-filter">
+                        <option value="">Tutti i prestiti</option>
+                        <option value="active">Attivi</option>
+                        <option value="returned">Restituiti</option>
+                        <option value="overdue">In ritardo</option>
+                    </select>
+                </div>
+
+                <div class="loans-grid" id="loans-grid">
+                    <!-- Loans will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="section" id="stats-section">
+                <div class="section-header">
+                    <h2>Statistiche</h2>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Libri Totali</h3>
+                        <div class="stat-value" id="total-books">0</div>
+                        <div class="stat-change">📚</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Utenti Registrati</h3>
+                        <div class="stat-value" id="total-users">0</div>
+                        <div class="stat-change">👥</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Prestiti Attivi</h3>
+                        <div class="stat-value" id="active-loans">0</div>
+                        <div class="stat-change">📖</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Libri Disponibili</h3>
+                        <div class="stat-value" id="available-books">0</div>
+                        <div class="stat-change">✅</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Libri per Genere</h3>
+                    <div class="chart" id="genre-chart">
+                        <!-- Chart will be generated here -->
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-    <div id="global_msg" class="global-msg" aria-live="polite"></div>
-    <div class="grid">
-      <div class="panel">
-        <div class="cols">
-          <div class="col">
-            <div class="section-title"><strong>Libri</strong><span class="small-note">Catalogo</span></div>
-            <div class="form-row"><label class="small">Titolo</label><input id="nb_title" type="text"/></div>
-            <div class="form-row"><label class="small">Autore</label><input id="nb_author" type="text"/></div>
-            <div class="form-row"><label class="small">Genere</label><input id="nb_genre" type="text"/></div>
-            <div class="form-row"><label class="small">Anno</label><input id="nb_year" type="number"/></div>
-            <div class="form-row"><label class="small">ISBN</label><input id="nb_isbn" type="text"/></div>
-            <div class="form-row"><button id="nb_create_btn" class="btn btn-primary" onclick="createBook()">Aggiungi libro</button><span id="nb_msg" class="small-note" style="margin-left:10px"></span></div>
-            <hr/>
-            <div id="books" class="card-list"></div>
-          </div>
-          <div style="width:340px">
-            <div class="section-title"><strong>Utenti</strong><span class="small-note">Registrati</span></div>
-            <div class="form-row"><label class="small">Nome</label><input id="nu_name" type="text"/></div>
-            <div class="form-row"><label class="small">Email</label><input id="nu_email" type="text"/></div>
-            <div class="form-row"><button id="nu_create_btn" class="btn btn-primary" onclick="createUser()">Registra utente</button><span id="nu_msg" class="small-note" style="margin-left:10px"></span></div>
-            <div id="users" style="margin-top:10px" class="card-list"></div>
-          </div>
+
+    <!-- Modals -->
+    <!-- Add Book Modal -->
+    <div class="modal" id="book-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="book-modal-title">Aggiungi Libro</h3>
+                <button class="modal-close" id="book-modal-close">✕</button>
+            </div>
+            <form id="book-form" class="modal-form">
+                <div class="form-group">
+                    <label for="book-title">Titolo *</label>
+                    <input type="text" id="book-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="book-author">Autore *</label>
+                    <input type="text" id="book-author" required>
+                </div>
+                <div class="form-group">
+                    <label for="book-genre">Genere *</label>
+                    <select id="book-genre" required>
+                        <option value="">Seleziona genere</option>
+                        <option value="Narrativa">Narrativa</option>
+                        <option value="Tecnologia">Tecnologia</option>
+                        <option value="Business">Business</option>
+                        <option value="Self-help">Self-help</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Storia">Storia</option>
+                        <option value="Filosofia">Filosofia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="book-year">Anno di Pubblicazione *</label>
+                    <input type="number" id="book-year" min="1000" max="2030" required>
+                </div>
+                <div class="form-group">
+                    <label for="book-isbn">ISBN</label>
+                    <input type="text" id="book-isbn">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="book-cancel-btn">Annulla</button>
+                    <button type="submit" class="btn btn-primary">Salva</button>
+                </div>
+            </form>
         </div>
-      </div>
-      <div class="panel">
-        <div class="section-title"><strong>Prestiti</strong><span class="small-note">Gestione prestiti</span></div>
-        <div class="form-row"><label class="small">Libro</label><select id="nl_book"></select></div>
-        <div class="form-row"><label class="small">Utente</label><select id="nl_user"></select></div>
-        <div class="form-row"><label class="small">Giorni</label><input id="nl_days" type="number" value="14"/></div>
-        <div class="form-row"><button id="nl_create_btn" class="btn btn-primary" onclick="createLoan()">Crea prestito</button><span id="nl_msg" class="small-note" style="margin-left:10px"></span></div>
-        <hr/>
-        <div id="loans" class="card-list"></div>
-      </div>
     </div>
-  </div>
-  <script src="/main.js"></script>
+
+    <!-- Add User Modal -->
+    <div class="modal" id="user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="user-modal-title">Registra Utente</h3>
+                <button class="modal-close" id="user-modal-close">✕</button>
+            </div>
+            <form id="user-form" class="modal-form">
+                <div class="form-group">
+                    <label for="user-name">Nome Completo *</label>
+                    <input type="text" id="user-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-email">Email *</label>
+                    <input type="email" id="user-email" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="user-cancel-btn">Annulla</button>
+                    <button type="submit" class="btn btn-primary">Registra</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Loan Modal -->
+    <div class="modal" id="loan-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="loan-modal-title">Nuovo Prestito</h3>
+                <button class="modal-close" id="loan-modal-close">✕</button>
+            </div>
+            <form id="loan-form" class="modal-form">
+                <div class="form-group">
+                    <label for="loan-book">Libro *</label>
+                    <select id="loan-book" required>
+                        <option value="">Seleziona libro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="loan-user">Utente *</label>
+                    <select id="loan-user" required>
+                        <option value="">Seleziona utente</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="loan-days">Durata (giorni) *</label>
+                    <input type="number" id="loan-days" value="14" min="1" max="90" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="loan-cancel-btn">Annulla</button>
+                    <button type="submit" class="btn btn-primary">Crea Prestito</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>

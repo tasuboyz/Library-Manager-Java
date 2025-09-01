@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Gestore Libreria - UI (OLD)</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    pre { background:#f4f4f4; padding:8px }
+  </style>
+</head>
+<body>
+  <h1>Gestore Libreria Digitale (Web)</h1>
+  <div class="container">
+    <div class="section-title">
+      <h1>Gestore Libreria Digitale</h1>
+      <div class="controls">
+        <button class="btn btn-ghost" onclick="loadBooks()">Ricarica libri</button>
+        <button class="btn btn-ghost" onclick="loadUsers()">Ricarica utenti</button>
+        <button class="btn btn-ghost" onclick="loadLoans()">Ricarica prestiti</button>
+      </div>
+    </div>
+    <div id="global_msg" class="global-msg" aria-live="polite"></div>
+    <div class="grid">
+      <div class="panel">
+        <div class="cols">
+          <div class="col">
+            <div class="section-title"><strong>Libri</strong><span class="small-note">Catalogo</span></div>
+            <div class="form-row"><label class="small">Titolo</label><input id="nb_title" type="text"/></div>
+            <div class="form-row"><label class="small">Autore</label><input id="nb_author" type="text"/></div>
+            <div class="form-row"><label class="small">Genere</label><input id="nb_genre" type="text"/></div>
+            <div class="form-row"><label class="small">Anno</label><input id="nb_year" type="number"/></div>
+            <div class="form-row"><label class="small">ISBN</label><input id="nb_isbn" type="text"/></div>
+            <div class="form-row"><button id="nb_create_btn" class="btn btn-primary" onclick="createBook()">Aggiungi libro</button><span id="nb_msg" class="small-note" style="margin-left:10px"></span></div>
+            <hr/>
+            <div id="books" class="card-list"></div>
+          </div>
+          <div style="width:340px">
+            <div class="section-title"><strong>Utenti</strong><span class="small-note">Registrati</span></div>
+            <div class="form-row"><label class="small">Nome</label><input id="nu_name" type="text"/></div>
+            <div class="form-row"><label class="small">Email</label><input id="nu_email" type="text"/></div>
+            <div class="form-row"><button id="nu_create_btn" class="btn btn-primary" onclick="createUser()">Registra utente</button><span id="nu_msg" class="small-note" style="margin-left:10px"></span></div>
+            <div id="users" style="margin-top:10px" class="card-list"></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="section-title"><strong>Prestiti</strong><span class="small-note">Gestione prestiti</span></div>
+        <div class="form-row"><label class="small">Libro</label><select id="nl_book"></select></div>
+        <div class="form-row"><label class="small">Utente</label><select id="nl_user"></select></div>
+        <div class="form-row"><label class="small">Giorni</label><input id="nl_days" type="number" value="14"/></div>
+        <div class="form-row"><button id="nl_create_btn" class="btn btn-primary" onclick="createLoan()">Crea prestito</button><span id="nl_msg" class="small-note" style="margin-left:10px"></span></div>
+        <hr/>
+        <div id="loans" class="card-list"></div>
+      </div>
+    </div>
+  </div>
+  <script src="/main.js"></script>
+</body>
+</html>
