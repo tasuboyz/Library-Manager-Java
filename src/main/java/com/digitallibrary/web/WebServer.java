@@ -71,7 +71,7 @@ public class WebServer {
         server.createContext("/api/loans", this::handleLoans);
         server.setExecutor(java.util.concurrent.Executors.newCachedThreadPool());
         server.start();
-        System.out.println("Web UI available at http://localhost:" + port + "/");
+        System.out.println("Web UI available at http://localhost:" + port + "/ (serving ./frontend)");
     }
 
     public void stop() {
@@ -91,7 +91,7 @@ public class WebServer {
             // normalize and prevent directory traversal
             if (rawPath.contains("..")) { writeResponse(ex, 400, "Bad path"); return; }
             if (rawPath.startsWith("/")) rawPath = rawPath.substring(1);
-            Path p = Paths.get(System.getProperty("user.dir"), "web", rawPath);
+            Path p = Paths.get(System.getProperty("user.dir"), "frontend", rawPath);
             if (!Files.exists(p) || Files.isDirectory(p)) {
                 writeResponse(ex, 404, "Not found");
                 return;
@@ -103,6 +103,9 @@ public class WebServer {
             else if (rawPath.endsWith(".js")) ct = "application/javascript; charset=utf-8";
             else if (rawPath.endsWith(".css")) ct = "text/css; charset=utf-8";
             else if (rawPath.endsWith(".json")) ct = "application/json; charset=utf-8";
+            else if (rawPath.endsWith(".svg")) ct = "image/svg+xml; charset=utf-8";
+            else if (rawPath.endsWith(".png")) ct = "image/png";
+            else if (rawPath.endsWith(".jpg") || rawPath.endsWith(".jpeg")) ct = "image/jpeg";
             h.set("Content-Type", ct);
             ex.sendResponseHeaders(200, content.length);
             try (OutputStream os = ex.getResponseBody()) { os.write(content); }
@@ -117,8 +120,49 @@ public class WebServer {
             String method = ex.getRequestMethod();
             System.out.println("HTTP " + method + " " + ex.getRequestURI());
             if ("GET".equalsIgnoreCase(method)) {
-                List<Book> books = bookService.listAll();
-                writeJson(ex, 200, books);
+                // support simple pagination and search: ?limit=20&offset=40&q=term
+                String query = ex.getRequestURI().getQuery();
+                int limit = 20;
+                int offset = 0;
+                String q = null;
+                if (query != null) {
+                    for (String part : query.split("&")) {
+                        String[] kv = part.split("=", 2);
+                        if (kv.length == 2) {
+                            String k = kv[0];
+                            String v = java.net.URLDecoder.decode(kv[1], "UTF-8");
+                            if ("limit".equalsIgnoreCase(k)) {
+                                try { limit = Integer.parseInt(v); } catch (Exception ignore) {}
+                            } else if ("offset".equalsIgnoreCase(k) || "skip".equalsIgnoreCase(k)) {
+                                try { offset = Integer.parseInt(v); } catch (Exception ignore) {}
+                            } else if ("q".equalsIgnoreCase(k)) {
+                                q = v.trim();
+                            }
+                        }
+                    }
+                }
+                List<Book> all = bookService.listAll();
+                List<Book> filtered;
+                if (q != null && !q.isEmpty()) {
+                    String low = q.toLowerCase();
+                    filtered = all.stream().filter(b -> {
+                        return (b.getTitle() != null && b.getTitle().toLowerCase().contains(low))
+                                || (b.getAuthor() != null && b.getAuthor().toLowerCase().contains(low))
+                                || (b.getIsbn() != null && b.getIsbn().toLowerCase().contains(low));
+                    }).collect(Collectors.toList());
+                } else {
+                    filtered = all;
+                }
+                int total = filtered.size();
+                int start = Math.max(0, Math.min(total, offset));
+                int end = Math.max(start, Math.min(total, start + Math.max(1, limit)));
+                List<Book> page = filtered.subList(start, end);
+                java.util.Map<String,Object> resp = new java.util.LinkedHashMap<>();
+                resp.put("items", page);
+                resp.put("total", total);
+                resp.put("limit", limit);
+                resp.put("offset", offset);
+                writeJson(ex, 200, resp);
                 return;
             }
             if ("POST".equalsIgnoreCase(method)) {

@@ -4,11 +4,51 @@ async function fetchJson(path, opts) {
   return await r.json();
 }
 
+// pagination state for books
+const booksState = { q: '', limit: 20, offset: 0, total: 0 };
+
+function buildBooksQuery() {
+  const params = [];
+  if (booksState.q && booksState.q.trim().length > 0) params.push('q=' + encodeURIComponent(booksState.q));
+  params.push('limit=' + booksState.limit);
+  params.push('offset=' + booksState.offset);
+  return '/api/books' + (params.length ? ('?' + params.join('&')) : '');
+}
+
+function reloadBooks() { // called by page size select
+  const sel = document.getElementById('books_page_size');
+  if (sel) booksState.limit = parseInt(sel.value);
+  booksState.offset = 0;
+  loadBooks();
+}
+
+function booksNext() { if (booksState.offset + booksState.limit < booksState.total) { booksState.offset += booksState.limit; loadBooks(); } }
+function booksPrev() { if (booksState.offset - booksState.limit >= 0) { booksState.offset -= booksState.limit; loadBooks(); } else { booksState.offset = 0; loadBooks(); } }
+
+function updateBooksPageInfo() {
+  const info = document.getElementById('books_page_info');
+  if (!info) return;
+  const start = booksState.offset + 1;
+  const end = Math.min(booksState.offset + booksState.limit, booksState.total);
+  info.textContent = `${start}-${end} of ${booksState.total}`;
+}
+
+function debounce(fn, wait) {
+  let t;
+  return function(...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), wait); };
+}
+
+function doSearchBooks(q) { booksState.q = q || ''; booksState.offset = 0; loadBooks(); }
+const debouncedSearch = debounce(() => { const v = document.getElementById('books_q').value; doSearchBooks(v); }, 300);
+
 async function loadBooks() {
   const list = document.getElementById('books');
   list.innerHTML = 'Loading...';
   try {
-    const books = await fetchJson('/api/books');
+    const resp = await fetchJson(buildBooksQuery());
+    const books = resp && resp.items ? resp.items : [];
+    booksState.total = resp && resp.total ? resp.total : 0;
+    updateBooksPageInfo();
     if (!books || books.length === 0) {
       list.innerHTML = '<div>(nessun libro)</div>';
       populateBookSelects([]);
