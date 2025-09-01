@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Gestore Libreria - UI</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .col { float: left; width: 30%; margin-right: 2%; }
+    .row:after { content: ""; display: table; clear: both; }
+    pre { background:#f4f4f4; padding:8px }
+  </style>
+  <script src="/main.js"></script>
+</head>
+<body>
+  <h1>Gestore Libreria Digitale (Web)</h1>
+  <div class="row">
+    <div class="col">
+      <h2>Libri</h2>
+      <button onclick="loadBooks()">Ricarica</button>
+      <div>
+        <h3>Nuovo Libro</h3>
+        <div>Titolo: <input id="nb_title"/></div>
+        <div>Autore: <input id="nb_author"/></div>
+        <div>Genere: <input id="nb_genre"/></div>
+        <div>Anno: <input id="nb_year" type="number"/></div>
+        <div>ISBN: <input id="nb_isbn"/></div>
+        <button onclick="createBook()">Crea</button>
+      </div>
+      <div id="books"></div>
+    </div>
+    <div class="col">
+      <h2>Utenti</h2>
+      <button onclick="loadUsers()">Ricarica</button>
+      <div>
+        <h3>Nuovo Utente</h3>
+        <div>Nome: <input id="nu_name"/></div>
+        <div>Email: <input id="nu_email"/></div>
+        <button onclick="createUser()">Registra</button>
+      </div>
+      <div id="users"></div>
+    </div>
+    <div class="col">
+      <h2>Prestiti</h2>
+      <button onclick="loadLoans()">Ricarica</button>
+      <div>
+        <h3>Nuovo Prestito</h3>
+        <div>ID Libro: <input id="nl_book"/></div>
+        <div>ID Utente: <input id="nl_user"/></div>
+        <div>Giorni: <input id="nl_days" type="number" value="14"/></div>
+        <button onclick="createLoan()">Crea</button>
+      </div>
+      <div id="loans"></div>
+    </div>
+  </div>
+</body>
+</html>

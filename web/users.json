@@ -1,0 +1,80 @@
+[
+  {
+    "id": "a1f8c2d4-9b3e-4c5a-8f1a-111111111111",
+    "name": "Alessandro Verdi",
+    "email": "alessandro.verdi@example.com",
+    "registeredAt": "2024-01-15T10:30"
+  },
+  {
+    "id": "b2e9d3f5-1c4d-5e6b-9a2b-222222222222",
+    "name": "Martina Russo",
+    "email": "martina.russo@example.com",
+    "registeredAt": "2024-03-22T14:45"
+  },
+  {
+    "id": "c3f0e4a6-2d5e-6f7c-0b3c-333333333333",
+    "name": "Luca Bianchi",
+    "email": "luca.bianchi@example.com",
+    "registeredAt": "2024-06-05T09:15"
+  },
+  {
+    "id": "d4a1f5b7-3e6f-7a8d-1c4d-444444444444",
+    "name": "Giulia Romano",
+    "email": "giulia.romano@example.com",
+    "registeredAt": "2024-07-10T16:00"
+  },
+  {
+    "id": "e5b2g6c8-4f7a-8b9e-2d5e-555555555555",
+    "name": "Marco Conti",
+    "email": "marco.conti@example.com",
+    "registeredAt": "2024-08-01T11:20"
+  },
+  {
+    "id": "f6c3h7d9-5g8b-9c0f-3e6f-666666666666",
+    "name": "Sara Gallo",
+    "email": "sara.gallo@example.com",
+    "registeredAt": "2024-09-18T13:05"
+  },
+  {
+    "id": "g7d4i8e0-6h9c-0d1g-4f7a-777777777777",
+    "name": "Paolo Esposito",
+    "email": "paolo.esposito@example.com",
+    "registeredAt": "2024-10-30T08:50"
+  },
+  {
+    "id": "h8e5j9f1-7i0d-1e2h-5g8b-888888888888",
+    "name": "Francesca Marino",
+    "email": "francesca.marino@example.com",
+    "registeredAt": "2024-12-12T17:40"
+  },
+  {
+    "id": "c56736c3-e598-4b46-bf06-9349a62208d8",
+    "name": "Sistema (prestiti seed)",
+    "email": "seed@example.local",
+    "registeredAt": "2025-09-01T11:17:41.573236300"
+  },
+  {
+    "id": "ae5f7253-54ec-45a3-ac27-0a3339a52ccb",
+    "name": "Sistema (prestiti seed)",
+    "email": "seed@example.local",
+    "registeredAt": "2025-09-01T11:24:25.555474"
+  },
+  {
+    "id": "3544f8fc-5d6b-432f-81eb-cccec422ba29",
+    "name": "Sistema (prestiti seed)",
+    "email": "seed@example.local",
+    "registeredAt": "2025-09-01T11:34:53.130388400"
+  },
+  {
+    "id": "d94b68c3-a482-4a9c-9469-26990156fe3b",
+    "name": "Sistema (prestiti seed)",
+    "email": "seed@example.local",
+    "registeredAt": "2025-09-01T12:02:08.604151300"
+  },
+  {
+    "id": "3733a5c0-c858-45e5-b392-ce98e70e82f9",
+    "name": "Sistema (prestiti seed)",
+    "email": "seed@example.local",
+    "registeredAt": "2025-09-01T12:02:24.702637900"
+  }
+]

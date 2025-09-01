@@ -1,0 +1,82 @@
+# Java compiled classes
+*.class
+
+# Build directories
+/out/
+/build/
+/target/
+
+# Gradle
+/.gradle/
+.gradle/
+gradle-app.setting
+.gradle-cache/
+
+# Maven
+/.mvn/
+/repository/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# IntelliJ
+/.idea/
+*.iml
+out/production/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*~
+*.swp
+*.swo
+
+# Package distribution
+*.jar
+*.war
+*.ear
+
+# SQLite / DB files (runtime)
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env
+.env.*
+
+# Local test / debug files
+debug.log
+local.properties
+
+# Coverage reports
+coverage/
+coverage.*
+*.lcov
+
+# Node (if added later)
+node_modules/
+
+# Ignore IDE/task specific files
+/.idea/
+*.iml
+
+# Keep libs/ directory tracked by default (contains project jars used for compilation).
+# If you prefer to ignore binary libs, uncomment the next line:
+# /libs/
