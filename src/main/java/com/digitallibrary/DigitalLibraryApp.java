@@ -214,17 +214,19 @@ public class DigitalLibraryApp {
     public static void main(String[] args) {
         // Scegli repository in base agli argomenti: --memory, --json o default CSV
         BookRepository repo;
-    boolean useMemory = Arrays.asList(args).contains("--memory");
-    boolean useJson = Arrays.asList(args).contains("--json");
-    boolean useSqlite = Arrays.asList(args).contains("--sqlite");
-    String csvPath = System.getProperty("user.home") + "/digitallibrary_books.csv";
-    String jsonPath = System.getProperty("user.home") + "/digitallibrary_books.json";
-    String sqlitePath = System.getProperty("user.dir") + "/data/sample_books.db";
+        boolean useMemory = Arrays.asList(args).contains("--memory");
+        boolean useJson = Arrays.asList(args).contains("--json");
+        boolean useSqlite = Arrays.asList(args).contains("--sqlite");
+
+        java.nio.file.Path dataDir = java.nio.file.Paths.get(System.getProperty("user.dir"), "data");
+        String csvPath = dataDir.resolve("digitallibrary_books.csv").toString();
+        String jsonPath = dataDir.resolve("digitallibrary_books.json").toString();
+        String sqlitePath = dataDir.resolve("sample_books.db").toString();
 
         if (useMemory) {
             InMemoryBookRepository im = new InMemoryBookRepository();
             // seed in-memory books from data/books.json if present
-            java.nio.file.Path seedJson = java.nio.file.Paths.get(System.getProperty("user.dir"), "data", "books.json");
+            java.nio.file.Path seedJson = dataDir.resolve("books.json");
             if (java.nio.file.Files.exists(seedJson)) {
                 try {
                     JsonBookRepository loader = new JsonBookRepository(seedJson.toString());
@@ -299,8 +301,8 @@ public class DigitalLibraryApp {
                 lrepo = new com.digitallibrary.repository.JsonLoanRepository(loansJson.toString());
             } else if (useMemory && java.nio.file.Files.exists(usersJson)) {
                 // create data directory if missing
-                java.nio.file.Path dataDir = loansJson.getParent();
-                if (dataDir != null && !java.nio.file.Files.exists(dataDir)) java.nio.file.Files.createDirectories(dataDir);
+                java.nio.file.Path loansDataDir = loansJson.getParent();
+                if (loansDataDir != null && !java.nio.file.Files.exists(loansDataDir)) java.nio.file.Files.createDirectories(loansDataDir);
                 // create empty JSON array file to enable JsonLoanRepository
                 java.nio.file.Files.write(loansJson, "[]".getBytes(java.nio.charset.StandardCharsets.UTF_8));
                 lrepo = new com.digitallibrary.repository.JsonLoanRepository(loansJson.toString());
